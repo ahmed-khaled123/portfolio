@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmed Khaled — ML Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy:   #08111f;
+  --dark:   #0d1a2b;
+  --blue:   #1a6fa8;
+  --sky:    #2d9de8;
+  --gold:   #c9a84c;
+  --gold2:  #f0c96a;
+  --teal:   #1aad8a;
+  --white:  #f0f4f8;
+  --muted:  #7a90a8;
+  --card:   rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom cursor ── */
+.cursor {
+  position: fixed; width: 12px; height: 12px;
+  background: var(--gold); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, background 0.2s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1.5px solid var(--gold); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: all 0.15s ease;
+  opacity: 0.5;
+}
+
+/* ── Nav dots ── */
+.nav-dots {
+  position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+  z-index: 100; display: flex; flex-direction: column; gap: 12px;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--muted); cursor: pointer;
+  transition: all 0.3s; border: none; outline: none;
+}
+.dot.active { background: var(--gold); transform: scale(1.6); }
+.dot:hover  { background: var(--sky); }
+
+/* ── Slides ── */
+.slide {
+  min-height: 100vh; display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  padding: 0 10vw;
+}
+
+/* ── Noise texture overlay ── */
+.slide::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 1 — HERO
+══════════════════════════════════════ */
+#slide-1 {
+  background: linear-gradient(135deg, #08111f 0%, #0d1e35 60%, #091828 100%);
+  gap: 0;
+  padding: 0;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%; height: 100vh;
+  position: relative; z-index: 1;
+}
+
+.hero-left {
+  display: flex; flex-direction: column;
+  justify-content: center; padding: 80px 60px 80px 10vw;
+  position: relative;
+}
+
+/* animated grid lines */
+.hero-left::after {
+  content: '';
+  position: absolute; right: 0; top: 10%; bottom: 10%;
+  width: 1px; background: linear-gradient(to bottom, transparent, var(--border), transparent);
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(26,111,168,0.15); border: 1px solid rgba(45,157,232,0.3);
+  border-radius: 100px; padding: 6px 16px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--sky); letter-spacing: 0.08em;
+  margin-bottom: 28px; width: fit-content;
+  animation: fadeUp 0.8s ease both;
+}
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-name {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(42px, 5.5vw, 76px);
+  font-weight: 800; line-height: 1.0;
+  letter-spacing: -0.03em;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-name .accent { color: var(--gold); display: block; }
+
+.hero-title {
+  font-size: 15px; color: var(--muted); font-weight: 300;
+  margin: 18px 0 32px; letter-spacing: 0.02em;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.hero-title span { color: var(--sky); font-weight: 500; }
+
+.hero-usp {
+  font-style: italic; font-size: 15px;
+  color: var(--gold); line-height: 1.6;
+  border-left: 2px solid var(--gold);
+  padding-left: 16px; margin-bottom: 36px;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.hero-links {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+.link-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  transition: all 0.25s; cursor: none;
+  border: 1px solid var(--border);
+  color: var(--white); background: var(--card);
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+}
+.link-btn:hover { background: rgba(45,157,232,0.15); border-color: var(--sky); color: var(--sky); }
+.link-btn.primary { background: var(--gold); color: var(--navy); border-color: var(--gold); font-family: 'DM Sans', sans-serif; font-size: 13px; }
+.link-btn.primary:hover { background: var(--gold2); }
+
+.hero-right {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+/* Photo area */
+.photo-wrap {
+  position: relative; width: 320px; height: 400px;
+  animation: fadeUp 0.9s 0.2s ease both;
+}
+.photo-frame {
+  width: 100%; height: 100%; border-radius: 20px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative; z-index: 2;
+}
+.photo-frame img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(10%);
+}
+/* placeholder shown if img fails */
+.photo-placeholder {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #1a2e45 0%, #0d2137 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  font-family: 'Syne', sans-serif;
+}
+.photo-placeholder .initials {
+  font-size: 64px; font-weight: 800; color: var(--gold);
+  letter-spacing: -2px;
+}
+.photo-placeholder .hint {
+  font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em; text-align: center; line-height: 1.6;
+}
+
+/* decorative elements around photo */
+.photo-wrap::before {
+  content: ''; position: absolute;
+  width: 100%; height: 100%;
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 20px;
+  top: 12px; left: 12px; z-index: 1;
+}
+.photo-tag {
+  position: absolute; bottom: -16px; left: -16px; z-index: 3;
+  background: var(--dark); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.photo-tag .rate {
+  font-family: 'Syne', sans-serif; font-size: 22px;
+  font-weight: 700; color: var(--gold);
+}
+.photo-tag .rate-label {
+  font-size: 10px; color: var(--muted); margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.08em;
+}
+
+/* bg glow */
+.hero-glow {
+  position: absolute; width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(26,111,168,0.12) 0%, transparent 70%);
+  border-radius: 50%; pointer-events: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════
+   SLIDE 2 — ABOUT / USP
+══════════════════════════════════════ */
+#slide-2 {
+  background: linear-gradient(180deg, #0a1520 0%, #0d1e35 100%);
+  padding: 80px 10vw;
+}
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  width: 100%; z-index: 1; position: relative;
+}
+.slide-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--sky); letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.slide-heading {
+  font-family: 'Syne', sans-serif; font-size: clamp(32px, 3.5vw, 52px);
+  font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.slide-heading .gold { color: var(--gold); }
+.slide-body {
+  font-size: 15px; color: var(--muted); line-height: 1.8; font-weight: 300;
+  margin-bottom: 16px;
+}
+.highlight { color: var(--white); font-weight: 500; }
+
+.usp-cards { display: flex; flex-direction: column; gap: 16px; }
+.usp-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px 24px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: border-color 0.3s, background 0.3s;
+}
+.usp-card:hover { border-color: rgba(45,157,232,0.3); background: rgba(26,111,168,0.06); }
+.usp-icon {
+  font-size: 24px; flex-shrink: 0;
+  width: 44px; height: 44px; display: flex; align-items: center;
+  justify-content: center; background: rgba(26,111,168,0.1);
+  border-radius: 10px;
+}
+.usp-card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.usp-card-text  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+/* ══════════════════════════════════════
+   SLIDE 3 — SKILLS
+══════════════════════════════════════ */
+#slide-3 {
+  background: #080f1a;
+  padding: 80px 10vw;
+}
+.skills-wrap { width: 100%; z-index: 1; position: relative; }
+.skills-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; margin-top: 48px;
+}
+.skill-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.skill-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--sky));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.skill-card:hover::before { transform: scaleX(1); }
+.skill-card:hover { border-color: rgba(45,157,232,0.2); transform: translateY(-4px); }
+.skill-card-icon { font-size: 28px; margin-bottom: 14px; }
+.skill-card-title {
+  font-family: 'Syne', sans-serif; font-size: 14px;
+  font-weight: 700; margin-bottom: 10px; color: var(--white);
+  letter-spacing: 0.02em; text-transform: uppercase;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  padding: 3px 10px; border-radius: 100px;
+  background: rgba(45,157,232,0.1); border: 1px solid rgba(45,157,232,0.2);
+  color: var(--sky); letter-spacing: 0.03em;
+}
+.tag.gold-tag {
+  background: rgba(201,168,76,0.1); border-color: rgba(201,168,76,0.3);
+  color: var(--gold);
+}
+.tag.teal-tag {
+  background: rgba(26,173,138,0.1); border-color: rgba(26,173,138,0.3);
+  color: var(--teal);
+}
+
+/* ══════════════════════════════════════
+   SLIDE 4 — PROJECTS
+══════════════════════════════════════ */
+#slide-4 {
+  background: linear-gradient(180deg, #0d1a2b 0%, #08111f 100%);
+  padding: 80px 10vw;
+}
+.projects-wrap { width: 100%; z-index: 1; position: relative; }
+.projects-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 24px; margin-top: 48px;
+}
+.proj-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 18px; padding: 36px;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.proj-card::after {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(to bottom, var(--blue), var(--sky));
+  border-radius: 3px 0 0 3px;
+  transform: scaleY(0); transform-origin: top;
+  transition: transform 0.4s ease;
+}
+.proj-card:hover { border-color: rgba(45,157,232,0.2); transform: translateY(-4px); }
+.proj-card:hover::after { transform: scaleY(1); }
+.proj-number {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--muted); letter-spacing: 0.1em; margin-bottom: 16px;
+}
+.proj-title {
+  font-family: 'Syne', sans-serif; font-size: 20px;
+  font-weight: 700; margin-bottom: 6px;
+}
+.proj-subtitle { font-size: 12px; color: var(--sky); margin-bottom: 16px; font-family: 'JetBrains Mono', monospace; }
+.proj-desc { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+.proj-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.proj-card.featured {
+  grid-column: span 2;
+  background: linear-gradient(135deg, rgba(26,111,168,0.08) 0%, rgba(8,17,31,0.4) 100%);
+  border-color: rgba(45,157,232,0.2);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+}
+
+/* ══════════════════════════════════════
+   SLIDE 5 — SERVICES
+══════════════════════════════════════ */
+#slide-5 {
+  background: #080f1a;
+  padding: 80px 10vw;
+}
+.services-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 20px; margin-top: 48px; width: 100%; z-index: 1; position: relative;
+}
+.svc-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 30px; transition: all 0.3s;
+}
+.svc-card:hover { border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.03); }
+.svc-icon-wrap {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 18px;
+  background: rgba(26,111,168,0.1); border: 1px solid rgba(26,111,168,0.2);
+}
+.svc-title {
+  font-family: 'Syne', sans-serif; font-size: 18px;
+  font-weight: 700; margin-bottom: 10px;
+}
+.svc-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   SLIDE 6 — CONTACT
+══════════════════════════════════════ */
+#slide-6 {
+  background: linear-gradient(135deg, #08111f 0%, #0a1e32 100%);
+  padding: 80px 10vw;
+}
+.contact-wrap {
+  width: 100%; z-index: 1; position: relative;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+.contact-big {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 5vw, 68px);
+  font-weight: 800; line-height: 1.0; letter-spacing: -0.03em;
+}
+.contact-big .line2 { color: var(--gold); }
+.contact-sub { font-size: 15px; color: var(--muted); margin-top: 20px; line-height: 1.7; }
+
+.contact-cards { display: flex; flex-direction: column; gap: 14px; }
+.contact-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 16px;
+  transition: all 0.3s; text-decoration: none; cursor: none;
+}
+.contact-card:hover { border-color: rgba(45,157,232,0.3); background: rgba(26,111,168,0.08); }
+.contact-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(26,111,168,0.12); display: flex;
+  align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+.contact-card-label { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 2px; }
+.contact-card-val   { font-size: 14px; color: var(--white); font-weight: 500; }
+
+.terms-box {
+  margin-top: 28px; background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.2); border-radius: 14px;
+  padding: 22px 26px;
+}
+.terms-box-title {
+  font-family: 'Syne', sans-serif; font-size: 13px;
+  font-weight: 700; color: var(--gold); margin-bottom: 14px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.terms-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+.terms-row:last-child { border: none; }
+.terms-key { color: var(--muted); }
+.terms-val { color: var(--white); font-weight: 500; }
+
+/* ── Progress bar ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--gold));
+  z-index: 200; transition: width 0.3s ease;
+}
+
+/* ── Scroll hint ── */
+.scroll-hint {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  z-index: 100; opacity: 1; transition: opacity 0.5s;
+}
+.scroll-hint.hidden { opacity: 0; pointer-events: none; }
+.scroll-text { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.12em; }
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+  animation: scrollLine 1.5s infinite;
+}
+@keyframes scrollLine { 0%,100%{transform:scaleY(1);opacity:0.5} 50%{transform:scaleY(1.3);opacity:1} }
+
+/* ── Reveal animations ── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ── Decorative bg shapes ── */
+.bg-shape {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; z-index: 0;
+  filter: blur(80px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .hero-grid, .about-grid, .contact-wrap, .projects-grid { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+  .proj-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+  .slide { padding: 60px 6vw; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Nav dots -->
+<nav class="nav-dots" id="navDots">
+  <button class="dot active" data-slide="0" title="Home"></button>
+  <button class="dot" data-slide="1" title="About"></button>
+  <button class="dot" data-slide="2" title="Skills"></button>
+  <button class="dot" data-slide="3" title="Projects"></button>
+  <button class="dot" data-slide="4" title="Services"></button>
+  <button class="dot" data-slide="5" title="Contact"></button>
+</nav>
+
+<!-- Scroll hint -->
+<div class="scroll-hint" id="scrollHint">
+  <span class="scroll-text">SCROLL</span>
+  <div class="scroll-line"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     SLIDE 1 — HERO
+══════════════════════════════════════ -->
+<section class="slide" id="slide-1">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        AVAILABLE FOR PROJECTS
+      </div>
+
+      <h1 class="hero-name">
+        Ahmed<br>
+        <span class="accent">Khaled.</span>
+      </h1>
+
+      <p class="hero-title">
+        AI &amp; Machine Learning Engineer ·
+        <span>Tanta University</span>
+      </p>
+
+      <p class="hero-usp">
+        "Most ML engineers start with the model.<br>
+        I start with the data."
+      </p>
+
+      <div class="hero-links">
+        <a class="link-btn primary" href="#slide-6">Let's Work Together</a>
+        <a class="link-btn" href="https://linkedin.com/in/ahmed-elbanna-71061a254" target="_blank">LinkedIn ↗</a>
+        <a class="link-btn" href="https://github.com/ahmed-khaled123" target="_blank">GitHub ↗</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="bg-shape" style="width:400px;height:400px;background:radial-gradient(circle,rgba(26,111,168,0.1),transparent);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+
+      <div class="photo-wrap">
+        <div class="photo-frame">
+          <!--
+            ضع مسار صورتك هنا:
+            <img src="your-photo.jpg" alt="Ahmed Khaled" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          -->
+          <img
+            src="Ahmed_Khaled__1_.pdf"
+            alt="Ahmed Khaled"
+            style="display:none"
+            onerror="this.style.display='none'"
+          >
+          <div class="photo-placeholder" style="display:flex">
+            <span class="initials">AK</span>
+            <span class="hint">ضع صورتك هنا<br>your-photo.jpg</span>
+          </div>
+        </div>
+
+        <div class="photo-tag">
+          <div class="rate">$25<span style="font-size:14px;color:var(--muted)">/hr</span></div>
+          <div class="rate-label">AVAILABLE NOW</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SLIDE 2 — ABOUT
+══════════════════════════════════════ -->
+<section class="slide" id="slide-2">
+  <div class="about-grid">
+    <div>
+      <p class="slide-label reveal">// about me</p>
+      <h2 class="slide-heading reveal reveal-delay-1">
+        Data is the <span class="gold">real</span><br>intelligence.
+      </h2>
+      <p class="slide-body reveal reveal-delay-2">
+        I'm an AI Engineering student at <span class="highlight">Tanta University</span> specializing in
+        end-to-end Machine Learning pipelines. My work focuses on
+        <span class="highlight">bridging raw data and actionable insight</span> — not just training models.
+      </p>
+      <p class="slide-body reveal reveal-delay-3">
+        The uncomfortable truth in ML: <span class="highlight">80% of project failures
+        come from bad data</span>, not bad algorithms. That's why I audit
+        every dataset before touching a model — bias, leakage, imbalance,
+        missing edge cases. All of it.
+      </p>
+      <p class="slide-body reveal reveal-delay-4">
+        Specialized in <span class="highlight">NLP, Computer Vision, RLHF</span>, and
+        fine-grained data collection — finding the rare, hard examples that
+        make models robust in production, not just on paper.
+      </p>
+    </div>
+
+    <div class="usp-cards">
+      <div class="usp-card reveal reveal-delay-1">
+        <div class="usp-icon">🔍</div>
+        <div>
+          <div class="usp-card-title">Data-First Approach</div>
+          <div class="usp-card-text">Every project starts with a full data audit — bias, leakage, class imbalance, and edge cases — before one line of model code.</div>
+        </div>
+      </div>
+      <div class="usp-card reveal reveal-delay-2">
+        <div class="usp-icon">🎯</div>
+        <div>
+          <div class="usp-card-title">Fine-Grained Data Expert</div>
+          <div class="usp-card-text">I collect and curate the rare, hard examples that most practitioners skip — the ones that actually make a model production-ready.</div>
+        </div>
+      </div>
+      <div class="usp-card reveal reveal-delay-3">
+        <div class="usp-icon">📄</div>
+        <div>
+          <div class="usp-card-title">Clear Documentation</div>
+          <div class="usp-card-text">Every deliverable comes with a Notebook + PDF report readable by both technical and non-technical stakeholders.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SLIDE 3 — SKILLS
+══════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+  <div class="skills-wrap">
+    <p class="slide-label reveal">// technical stack</p>
+    <h2 class="slide-heading reveal reveal-delay-1">
+      Built to handle<br><span class="gold">the full pipeline.</span>
+    </h2>
+
+    <div class="skills-grid">
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-card-icon">🐍</div>
+        <div class="skill-card-title">Programming</div>
+        <div class="skill-tags">
+          <span class="tag">Python (Advanced)</span>
+          <span class="tag">SQL</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-card-icon">🤖</div>
+        <div class="skill-card-title">ML / DL Frameworks</div>
+        <div class="skill-tags">
+          <span class="tag">PyTorch</span>
+          <span class="tag">Scikit-learn</span>
+          <span class="tag">XGBoost</span>
+          <span class="tag">HuggingFace</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-card-icon">🧠</div>
+        <div class="skill-card-title">AI Specializations</div>
+        <div class="skill-tags">
+          <span class="tag teal-tag">NLP</span>
+          <span class="tag teal-tag">Computer Vision</span>
+          <span class="tag teal-tag">Deep Learning</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-card-icon">⭐</div>
+        <div class="skill-card-title">Unique Edge</div>
+        <div class="skill-tags">
+          <span class="tag gold-tag">RLHF</span>
+          <span class="tag gold-tag">Model Evaluation</span>
+          <span class="tag gold-tag">Fine-Grained Data</span>
+          <span class="tag gold-tag">Info Extraction</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-card-icon">📊</div>
+        <div class="skill-card-title">Data & Analysis</div>
+        <div class="skill-tags">
+          <span class="tag">Pandas</span>
+          <span class="tag">NumPy</span>
+          <span class="tag">Matplotlib</span>
+          <span class="tag">Seaborn</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-card-icon">🔧</div>
+        <div class="skill-card-title">Dev Tools</div>
+        <div class="skill-tags">
+          <span class="tag">Git</span>
+          <span class="tag">Jupyter</span>
+          <span class="tag">Audio Annotation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SLIDE 4 — PROJECTS
+══════════════════════════════════════ -->
+<section class="slide" id="slide-4">
+  <div class="projects-wrap">
+    <p class="slide-label reveal">// my work</p>
+    <h2 class="slide-heading reveal reveal-delay-1">
+      Projects that<br><span class="gold">prove the approach.</span>
+    </h2>
+
+    <div class="projects-grid">
+      <div class="proj-card featured reveal reveal-delay-2">
+        <div>
+          <div class="proj-number">PROJECT 01  ·  FEATURED</div>
+          <h3 class="proj-title">Trip Duration Prediction</h3>
+          <p class="proj-subtitle">NYC Taxi Dataset  ·  Regression  ·  Feature Engineering</p>
+          <p class="proj-desc">
+            Built a regression model on the NYC taxi dataset. The focus was
+            <strong style="color:var(--white)">advanced feature engineering</strong>:
+            time-of-day encoding, pickup/dropoff clustering, spatial distance features,
+            and traffic proxies. Compared Linear Regression, Random Forest, and XGBoost —
+            selected the final model based on RMSE and held-out generalization.
+          </p>
+          <div class="proj-tools">
+            <span class="tag">Python</span><span class="tag">Pandas</span>
+            <span class="tag">Scikit-learn</span><span class="tag">XGBoost</span>
+            <span class="tag">Matplotlib</span>
+          </div>
+        </div>
+        <div style="background:rgba(26,111,168,0.05);border:1px solid rgba(45,157,232,0.15);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--sky)">// KEY OUTCOME</div>
+          <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--gold)">↓ RMSE</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6">Feature engineering reduced model error significantly vs baseline. Spatial and temporal features proved most predictive.</div>
+          <div style="font-size:11px;color:var(--teal);font-family:'JetBrains Mono',monospace">FEATURE_ENG · REGRESSION · EDA</div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal reveal-delay-2">
+        <div class="proj-number">PROJECT 02</div>
+        <h3 class="proj-title">Medical Costs EDA</h3>
+        <p class="proj-subtitle">Insurance Dataset  ·  Exploratory Analysis</p>
+        <p class="proj-desc">
+          Deep exploratory analysis on medical insurance pricing. Visualized
+          relationships between age, BMI, smoking status, and regional cost
+          distributions. Identified key drivers and presented audience-ready visual insights.
+        </p>
+        <div class="proj-tools">
+          <span class="tag">Python</span><span class="tag">Pandas</span>
+          <span class="tag">Seaborn</span><span class="tag">Matplotlib</span>
+        </div>
+      </div>
+
+      <div class="proj-card reveal reveal-delay-3" style="border-color:rgba(201,168,76,0.15);background:rgba(201,168,76,0.03)">
+        <div class="proj-number">NEXT PROJECT</div>
+        <h3 class="proj-title" style="color:var(--muted)">Coming Soon</h3>
+        <p class="proj-subtitle">NLP / Computer Vision</p>
+        <p class="proj-desc" style="color:rgba(122,144,168,0.6)">
+          Working on a new project involving fine-grained data collection
+          and model evaluation in NLP or Computer Vision domain.
+        </p>
+        <div class="proj-tools">
+          <span class="tag gold-tag">In Progress</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SLIDE 5 — SERVICES
+══════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+  <div style="width:100%;z-index:1;position:relative">
+    <p class="slide-label reveal">// what I do</p>
+    <h2 class="slide-heading reveal reveal-delay-1">
+      Four things I do<br><span class="gold">exceptionally well.</span>
+    </h2>
+
+    <div class="services-grid" style="margin-top:48px">
+      <div class="svc-card reveal reveal-delay-1">
+        <div class="svc-icon-wrap">🔍</div>
+        <div class="svc-title">Data Auditing &amp; Engineering</div>
+        <p class="svc-desc">
+          Before any model gets trained, I audit the dataset end-to-end:
+          detecting leakage, class imbalance, mislabeled samples, distribution
+          shift, and missing edge cases. This is where most projects win or lose.
+        </p>
+      </div>
+
+      <div class="svc-card reveal reveal-delay-2">
+        <div class="svc-icon-wrap">🤖</div>
+        <div class="svc-title">ML Model Development</div>
+        <p class="svc-desc">
+          End-to-end pipelines from raw messy data to a trained, evaluated,
+          and documented model. Python · Scikit-learn · XGBoost · PyTorch.
+          Delivered as a clean Jupyter Notebook + PDF report.
+        </p>
+      </div>
+
+      <div class="svc-card reveal reveal-delay-3">
+        <div class="svc-icon-wrap">🧠</div>
+        <div class="svc-title">RLHF &amp; Model Evaluation</div>
+        <p class="svc-desc">
+          Specialized in assessing AI-generated outputs for safety, factuality,
+          and alignment. RLHF workflows, preference data annotation, and
+          systematic model evaluation with the right metrics for the right problem.
+        </p>
+      </div>
+
+      <div class="svc-card reveal reveal-delay-4">
+        <div class="svc-icon-wrap">🎙️</div>
+        <div class="svc-title">Audio &amp; NLP</div>
+        <p class="svc-desc">
+          Audio annotation, transcript verification, and linguistic analysis.
+          NLP model fine-tuning using Transformers and HuggingFace.
+          Handles Arabic and English text tasks with equal proficiency.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SLIDE 6 — CONTACT
+══════════════════════════════════════ -->
+<section class="slide" id="slide-6">
+  <div class="contact-wrap">
+    <div>
+      <p class="slide-label reveal">// get in touch</p>
+      <h2 class="contact-big reveal reveal-delay-1">
+        Let's build<br>
+        <span class="line2">something</span><br>
+        that works.
+      </h2>
+      <p class="contact-sub reveal reveal-delay-2">
+        Not just in the notebook — in production. If you have a dataset
+        and need results you can trust, let's talk.
+      </p>
+
+      <div class="terms-box reveal reveal-delay-3">
+        <div class="terms-box-title">Working Terms</div>
+        <div class="terms-row"><span class="terms-key">Rate</span><span class="terms-val">$25/hr or fixed price</span></div>
+        <div class="terms-row"><span class="terms-key">Timeline</span><span class="terms-val">5–10 days</span></div>
+        <div class="terms-row"><span class="terms-key">Payment</span><span class="terms-val">50% up · 50% on delivery</span></div>
+        <div class="terms-row"><span class="terms-key">Revisions</span><span class="terms-val">3 days post-delivery support</span></div>
+        <div class="terms-row"><span class="terms-key">Ownership</span><span class="terms-val">100% yours after payment</span></div>
+      </div>
+    </div>
+
+    <div class="contact-cards reveal reveal-delay-2">
+      <a class="contact-card" href="mailto:ahmedelbanna6969@gmail.com">
+        <div class="contact-card-icon">📧</div>
+        <div>
+          <div class="contact-card-label">EMAIL</div>
+          <div class="contact-card-val">ahmedelbanna6969@gmail.com</div>
+        </div>
+      </a>
+      <a class="contact-card" href="tel:+201030915336">
+        <div class="contact-card-icon">📞</div>
+        <div>
+          <div class="contact-card-label">PHONE</div>
+          <div class="contact-card-val">+201030915336</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://linkedin.com/in/ahmed-elbanna-71061a254" target="_blank">
+        <div class="contact-card-icon">🔗</div>
+        <div>
+          <div class="contact-card-label">LINKEDIN</div>
+          <div class="contact-card-val">ahmed-elbanna-71061a254</div>
+        </div>
+      </a>
+      <a class="contact-card" href="https://github.com/ahmed-khaled123" target="_blank">
+        <div class="contact-card-icon">💻</div>
+        <div>
+          <div class="contact-card-label">GITHUB</div>
+          <div class="contact-card-val">ahmed-khaled123</div>
+        </div>
+      </a>
+      <div class="contact-card" style="cursor:default">
+        <div class="contact-card-icon">📍</div>
+        <div>
+          <div class="contact-card-label">LOCATION</div>
+          <div class="contact-card-val">Elmahalla Elkobra, Egypt</div>
+        </div>
+      </div>
+
+      <div style="margin-top:8px;padding:20px 22px;background:rgba(26,173,138,0.06);border:1px solid rgba(26,173,138,0.2);border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);line-height:1.8">
+        <span style="color:var(--muted)">// quote</span><br>
+        "Your model is only as smart<br>&nbsp;&nbsp;as your data."
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ── Cursor ──────────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+function animateCursor() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  ring.style.left   = rx + 'px'; ring.style.top  = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .usp-card, .skill-card, .proj-card, .svc-card, .contact-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.opacity = '0.8'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform  = 'translate(-50%,-50%) scale(1)'; ring.style.opacity = '0.5'; });
+});
+
+// ── Progress bar ─────────────────────────────────────────────────────────────
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  progressBar.style.width = (pct * 100) + '%';
+});
+
+// ── Nav dots ──────────────────────────────────────────────────────────────────
+const slides  = document.querySelectorAll('.slide');
+const dots    = document.querySelectorAll('.dot');
+const hint    = document.getElementById('scrollHint');
+
+function getActiveSlide() {
+  let active = 0;
+  slides.forEach((s, i) => {
+    if (s.getBoundingClientRect().top <= window.innerHeight * 0.5) active = i;
+  });
+  return active;
+}
+
+window.addEventListener('scroll', () => {
+  const idx = getActiveSlide();
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  if (window.scrollY > 100) hint.classList.add('hidden');
+  else hint.classList.remove('hidden');
+});
+
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => slides[i].scrollIntoView({ behavior: 'smooth' }));
+});
+
+// slide-6 link
+document.querySelector('a[href="#slide-6"]').addEventListener('click', e => {
+  e.preventDefault(); slides[5].scrollIntoView({ behavior: 'smooth' });
+});
+
+// ── Reveal on scroll ──────────────────────────────────────────────────────────
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.15 });
+reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
